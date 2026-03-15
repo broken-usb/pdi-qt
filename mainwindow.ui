@@ -26,6 +26,9 @@
     <property name="cursor">
      <cursorShape>ForbiddenCursor</cursorShape>
     </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::Box</enum>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -41,6 +44,9 @@
     </property>
     <property name="cursor">
      <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::Box</enum>
     </property>
     <property name="text">
      <string/>
@@ -122,7 +128,7 @@
    <widget class="QPushButton" name="btnCarregar">
     <property name="geometry">
      <rect>
-      <x>482</x>
+      <x>480</x>
       <y>170</y>
       <width>131</width>
       <height>26</height>
@@ -175,6 +181,89 @@
     </property>
     <property name="text">
      <string>Efeitos</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnPassaBaixas">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>141</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica o filtro de &amp;quot;Passa Baixas&amp;quot;, mais conhecido como Blur/Borrão.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Passa-Baixas</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblTxtFiltros">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>58</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Filtros</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnHistograma">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>141</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string>Gerar Histograma</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblTxtTecnica">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>81</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Área Tecnica</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblHistograma">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>461</width>
+      <height>361</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>CrossCursor</cursorShape>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

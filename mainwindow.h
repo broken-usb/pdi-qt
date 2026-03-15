@@ -26,6 +26,10 @@ private slots:
 
     void on_btnSalvar_clicked();
 
+    void on_btnPassaBaixas_clicked();
+
+    void on_btnHistograma_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
