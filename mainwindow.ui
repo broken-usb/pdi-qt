@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>PDI - QT</string>
   </property>
+  <property name="animated">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="lblOriginal">
     <property name="geometry">
@@ -55,9 +58,9 @@
    <widget class="QPushButton" name="btnSalvar">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>40</y>
-      <width>121</width>
+      <x>340</x>
+      <y>60</y>
+      <width>181</width>
       <height>26</height>
      </rect>
     </property>
@@ -128,9 +131,9 @@
    <widget class="QPushButton" name="btnCarregar">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>10</y>
-      <width>121</width>
+      <x>340</x>
+      <y>30</y>
+      <width>181</width>
       <height>26</height>
      </rect>
     </property>
@@ -175,19 +178,19 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>58</width>
+      <width>101</width>
       <height>18</height>
      </rect>
     </property>
     <property name="text">
-     <string>Efeitos</string>
+     <string>Efeitos &amp; Filtros</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnPassaBaixas">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>90</y>
       <width>141</width>
       <height>26</height>
      </rect>
@@ -200,19 +203,6 @@
     </property>
     <property name="text">
      <string>Suavização</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lblTxtFiltros">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>90</y>
-      <width>58</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Filtros</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnHistograma">
@@ -273,7 +263,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>120</y>
       <width>81</width>
       <height>26</height>
      </rect>
@@ -292,7 +282,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>140</y>
+      <y>120</y>
       <width>51</width>
       <height>26</height>
      </rect>
@@ -308,7 +298,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>170</y>
+      <y>150</y>
       <width>51</width>
       <height>26</height>
      </rect>
@@ -324,7 +314,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>150</y>
       <width>81</width>
       <height>26</height>
      </rect>
@@ -337,6 +327,38 @@
     </property>
     <property name="text">
      <string>Quantização</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnMediana">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>180</y>
+      <width>141</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica o filtro mediana na foto, bem similar ao de suavização porem de uma forma que preserva melhor a qualidade original da imagem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Mediana</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblTxtArquivos">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>10</y>
+      <width>181</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Gerenciamento de Arquivo(s)</string>
     </property>
    </widget>
   </widget>

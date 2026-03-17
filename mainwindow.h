@@ -34,6 +34,8 @@ private slots:
 
     void on_btnQuantizacao_clicked();
 
+    void on_btnMediana_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

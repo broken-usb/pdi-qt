@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QPainter>
+#include <vector>
+#include <algorithm>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -296,6 +298,52 @@ void MainWindow::on_btnQuantizacao_clicked()
             int novoB = (nivelB * 255) / (niveis - 1);
 
             imgProcessada.setPixelColor(x, y, QColor(novoR, novoG, novoB));
+        }
+    }
+
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
+
+
+void MainWindow::on_btnMediana_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    QImage imgOriginal = pixmapOriginal.toImage();
+    QImage imgProcessada = imgOriginal.copy();
+
+    int largura = imgOriginal.width();
+    int altura = imgOriginal.height();
+
+    for (int y = 1; y < altura - 1; y++) {
+        for (int x = 1; x < largura - 1; x++) {
+
+            std::vector<int> valoresR, valoresG, valoresB;
+
+            for (int ky = -1; ky <= 1; ky++) {
+                for (int kx = -1; kx <= 1; kx++) {
+
+                    QColor corVizinho = imgOriginal.pixelColor(x + kx, y + ky);
+
+                    valoresR.push_back(corVizinho.red());
+                    valoresG.push_back(corVizinho.green());
+                    valoresB.push_back(corVizinho.blue());
+                }
+            }
+
+            std::sort(valoresR.begin(), valoresR.end());
+            std::sort(valoresG.begin(), valoresG.end());
+            std::sort(valoresB.begin(), valoresB.end());
+
+            int medianaR = valoresR[4];
+            int medianaG = valoresG[4];
+            int medianaB = valoresB[4];
+
+            imgProcessada.setPixelColor(x, y, QColor(medianaR, medianaG, medianaB));
         }
     }
 
