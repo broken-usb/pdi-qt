@@ -230,3 +230,75 @@ void MainWindow::on_btnHistograma_clicked()
     ui->lblHistograma->setPixmap(grafico);
 }
 
+
+void MainWindow::on_btnBrilho_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    int constante = ui->edtBrilho->text().toInt();
+
+    QImage imgProcessada = pixmapOriginal.toImage();
+    int largura = imgProcessada.width();
+    int altura = imgProcessada.height();
+
+    for (int y = 0; y < altura; y++) {
+        for (int x = 0; x < largura; x++) {
+
+            QColor corOriginal = imgProcessada.pixelColor(x, y);
+
+            int r = qBound(0, corOriginal.red() + constante, 255);
+            int g = qBound(0, corOriginal.green() + constante, 255);
+            int b = qBound(0, corOriginal.blue() + constante, 255);
+
+            imgProcessada.setPixelColor(x, y, QColor(r, g, b));
+        }
+    }
+
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
+
+
+void MainWindow::on_btnQuantizacao_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    int niveis = ui->edtQuantizacao->text().toInt();
+
+    if (niveis < 2) {
+        QMessageBox::warning(this, "Aviso", "O número de níveis deve ser no mínimo 2.");
+        return;
+    }
+
+    QImage imgProcessada = pixmapOriginal.toImage();
+    int largura = imgProcessada.width();
+    int altura = imgProcessada.height();
+
+    for (int y = 0; y < altura; y++) {
+        for (int x = 0; x < largura; x++) {
+
+            QColor cor = imgProcessada.pixelColor(x, y);
+
+
+            int nivelR = (cor.red() * niveis) / 256;
+            int nivelG = (cor.green() * niveis) / 256;
+            int nivelB = (cor.blue() * niveis) / 256;
+
+            int novoR = (nivelR * 255) / (niveis - 1);
+            int novoG = (nivelG * 255) / (niveis - 1);
+            int novoB = (nivelB * 255) / (niveis - 1);
+
+            imgProcessada.setPixelColor(x, y, QColor(novoR, novoG, novoB));
+        }
+    }
+
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
+

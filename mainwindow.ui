@@ -17,10 +17,10 @@
    <widget class="QLabel" name="lblOriginal">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>530</x>
       <y>20</y>
-      <width>151</width>
-      <height>141</height>
+      <width>261</width>
+      <height>251</height>
      </rect>
     </property>
     <property name="cursor">
@@ -36,10 +36,10 @@
    <widget class="QLabel" name="lblProcessada">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>20</y>
-      <width>151</width>
-      <height>141</height>
+      <x>530</x>
+      <y>300</y>
+      <width>261</width>
+      <height>251</height>
      </rect>
     </property>
     <property name="cursor">
@@ -55,9 +55,9 @@
    <widget class="QPushButton" name="btnSalvar">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>170</y>
-      <width>131</width>
+      <x>400</x>
+      <y>40</y>
+      <width>121</width>
       <height>26</height>
      </rect>
     </property>
@@ -128,9 +128,9 @@
    <widget class="QPushButton" name="btnCarregar">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>170</y>
-      <width>131</width>
+      <x>400</x>
+      <y>10</y>
+      <width>121</width>
       <height>26</height>
      </rect>
     </property>
@@ -147,7 +147,7 @@
    <widget class="QLabel" name="lblTxtOriginal">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>530</x>
       <y>0</y>
       <width>111</width>
       <height>18</height>
@@ -160,8 +160,8 @@
    <widget class="QLabel" name="lblTxtProcessada">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>0</y>
+      <x>530</x>
+      <y>280</y>
       <width>111</width>
       <height>18</height>
      </rect>
@@ -199,7 +199,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica o filtro de &amp;quot;Passa Baixas&amp;quot;, mais conhecido como Blur/Borrão.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="text">
-     <string>Passa-Baixas</string>
+     <string>Suavização</string>
     </property>
    </widget>
    <widget class="QLabel" name="lblTxtFiltros">
@@ -219,13 +219,16 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>160</y>
+      <y>260</y>
       <width>141</width>
       <height>26</height>
      </rect>
     </property>
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera o &amp;quot;Histograma&amp;quot;, que exibe como as cores são distribuidas na imagem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="text">
      <string>Gerar Histograma</string>
@@ -235,7 +238,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>240</y>
       <width>81</width>
       <height>18</height>
      </rect>
@@ -248,9 +251,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>190</y>
-      <width>461</width>
-      <height>361</height>
+      <y>290</y>
+      <width>291</width>
+      <height>251</height>
      </rect>
     </property>
     <property name="cursor">
@@ -264,6 +267,76 @@
     </property>
     <property name="scaledContents">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnBrilho">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>81</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtro para aumentar/diminuir o brilho de acordo com o valor informado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Brilho</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="edtBrilho">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>140</y>
+      <width>51</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Caixinha para informar o valor do aumento de brilho, para diminuir o brilho informe um valor negativo (ex: -32).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>64</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="edtQuantizacao">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>170</y>
+      <width>51</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Valor que sera utilizado para a quantização.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>16</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnQuantizacao">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>170</y>
+      <width>81</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplique o efeito de quantização de acordo com o valor informado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Quantização</string>
     </property>
    </widget>
   </widget>

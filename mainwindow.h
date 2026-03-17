@@ -30,6 +30,10 @@ private slots:
 
     void on_btnHistograma_clicked();
 
+    void on_btnBrilho_clicked();
+
+    void on_btnQuantizacao_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
