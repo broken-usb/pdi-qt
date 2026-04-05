@@ -10,14 +10,6 @@ Este projeto é uma ferramenta de Processamento Digital de Imagens (PDI) desenvo
 * **Análise:** Geração de Histograma em tempo real (Original e Processada).
 * **Lógica:** Aplicação de máscaras de imagem (Operação AND).
 
----
-
-Ótima observação! Incluir o **Qt Creator** no README é fundamental, pois ele é a "casa" oficial do projeto e facilita muito a vida de quem quer apenas abrir o código e rodar, sem lidar diretamente com o terminal.
-
-Aqui está o trecho atualizado para a seção de **Como Compilar e Executar**, incluindo o fluxo pelo Qt Creator:
-
----
-
 ### Como Compilar e Executar
 
 #### **Opção A: Via Qt Creator (Recomendado)**
