@@ -14,7 +14,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Define os sistemas operacionais solicitados
         os: [ubuntu-latest, windows-latest]
 
     runs-on: ${{ matrix.os }}
@@ -22,30 +21,34 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # Passo crucial: Instalar o Qt (necessário para compilar seu app PDI)
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v3
-      with:
-        version: '6.*' # Instala a versão mais recente do Qt 6
-        host: ${{ matrix.os == 'ubuntu-latest' && 'linux' || 'windows' }}
-        target: 'desktop'
-        # No Linux, precisamos de bibliotecas extras para interface gráfica
-        setup-python: 'false'
-
-    # Dependências extras para o Linux (necessárias para o Qt rodar no Ubuntu)
-    - name: Install Linux Dependencies
+    # --- CONFIGURAÇÃO LINUX ---
+    - name: Install Qt & Deps (Linux)
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
-        sudo apt-get install -y libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0
+        sudo apt-get install -y qt6-base-dev qt6-base-private-dev libgl1-mesa-dev
+
+    # --- CONFIGURAÇÃO WINDOWS ---
+    # O Windows-latest já tem o Qt, só precisamos dizer ao CMake onde ele está
+    - name: Set Qt Path (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        echo "Qt6_DIR=C:\Qt\6.5.3\msvc2019_64\lib\cmake\Qt6" >> $GITHUB_ENV
+        echo "CMAKE_PREFIX_PATH=C:\Qt\6.5.3\msvc2019_64" >> $GITHUB_ENV
 
     - name: Configure CMake
+      # Adicionamos o CMAKE_PREFIX_PATH para garantir que o CMake ache o Qt
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    # Opcional: Testes (apenas se tiver testes definidos no CMake)
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      shell: bash
+      run: |
+        if [ -f CTestTestfile.cmake ]; then
+          ctest -C ${{env.BUILD_TYPE}}
+        else
+          echo "No tests defined, skipping."
+        fi
