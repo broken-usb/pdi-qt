@@ -21,32 +21,25 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # --- CONFIGURAÇÃO LINUX ---
-    - name: Install Qt & Deps (Linux)
+    # Instalação do Qt de forma robusta
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.5.3' # Versão estável específica
+        arch: ${{ matrix.os == 'windows-latest' && 'win64_msvc2019_64' || '' }}
+        # Se o Python falhar, esta versão da action tentará métodos alternativos
+        setup-python: 'false' 
+
+    # Dependências extras apenas para o Linux
+    - name: Install Linux Dependencies
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
-        sudo apt-get install -y qt6-base-dev qt6-base-private-dev libgl1-mesa-dev
-
-    # --- CONFIGURAÇÃO WINDOWS ---
-    - name: Set Qt Path (Windows)
-      if: matrix.os == 'windows-latest'
-      shell: pwsh
-      run: |
-        # Busca automaticamente a pasta do Qt 6 dentro de C:\Qt
-        $qtPath = Get-ChildItem -Path "C:\Qt\6*" | Select-Object -First 1
-        if ($qtPath) {
-            $cmakePath = "$($qtPath.FullName)\msvc2019_64"
-            echo "QT_ROOT=$cmakePath" >> $env:GITHUB_ENV
-            echo "CMAKE_PREFIX_PATH=$cmakePath" >> $env:GITHUB_ENV
-            Write-Host "Qt encontrado em: $cmakePath"
-        } else {
-            Write-Error "Qt6 não encontrado em C:\Qt"
-        }
+        sudo apt-get install -y libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0 libgl1-mesa-dev
 
     - name: Configure CMake
-      # Adicionamos o -DQt6_DIR explicitamente para não haver erro
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH="${{env.QT_ROOT}}"
+      # O 'install-qt-action' define automaticamente as variáveis para o CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -58,5 +51,5 @@ jobs:
         if [ -f CTestTestfile.cmake ]; then
           ctest -C ${{env.BUILD_TYPE}}
         else
-          echo "No tests defined, skipping."
+          echo "Sem testes para executar."
         fi
