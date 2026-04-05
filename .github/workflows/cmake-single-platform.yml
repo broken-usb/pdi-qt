@@ -29,16 +29,24 @@ jobs:
         sudo apt-get install -y qt6-base-dev qt6-base-private-dev libgl1-mesa-dev
 
     # --- CONFIGURAÇÃO WINDOWS ---
-    # O Windows-latest já tem o Qt, só precisamos dizer ao CMake onde ele está
     - name: Set Qt Path (Windows)
       if: matrix.os == 'windows-latest'
+      shell: pwsh
       run: |
-        echo "Qt6_DIR=C:\Qt\6.5.3\msvc2019_64\lib\cmake\Qt6" >> $GITHUB_ENV
-        echo "CMAKE_PREFIX_PATH=C:\Qt\6.5.3\msvc2019_64" >> $GITHUB_ENV
+        # Busca automaticamente a pasta do Qt 6 dentro de C:\Qt
+        $qtPath = Get-ChildItem -Path "C:\Qt\6*" | Select-Object -First 1
+        if ($qtPath) {
+            $cmakePath = "$($qtPath.FullName)\msvc2019_64"
+            echo "QT_ROOT=$cmakePath" >> $env:GITHUB_ENV
+            echo "CMAKE_PREFIX_PATH=$cmakePath" >> $env:GITHUB_ENV
+            Write-Host "Qt encontrado em: $cmakePath"
+        } else {
+            Write-Error "Qt6 não encontrado em C:\Qt"
+        }
 
     - name: Configure CMake
-      # Adicionamos o CMAKE_PREFIX_PATH para garantir que o CMake ache o Qt
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      # Adicionamos o -DQt6_DIR explicitamente para não haver erro
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH="${{env.QT_ROOT}}"
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
