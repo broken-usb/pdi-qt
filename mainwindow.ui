@@ -6,9 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1000</width>
     <height>600</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1000</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>1000</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
    <string>PDI - QT</string>
@@ -20,10 +41,10 @@
    <widget class="QLabel" name="lblOriginal">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>740</x>
       <y>20</y>
-      <width>261</width>
-      <height>251</height>
+      <width>250</width>
+      <height>250</height>
      </rect>
     </property>
     <property name="cursor">
@@ -32,17 +53,23 @@
     <property name="frameShape">
      <enum>QFrame::Shape::Box</enum>
     </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Raised</enum>
+    </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="lblProcessada">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>740</x>
       <y>300</y>
-      <width>261</width>
-      <height>251</height>
+      <width>250</width>
+      <height>250</height>
      </rect>
     </property>
     <property name="cursor">
@@ -51,106 +78,20 @@
     <property name="frameShape">
      <enum>QFrame::Shape::Box</enum>
     </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Raised</enum>
+    </property>
     <property name="text">
      <string/>
     </property>
-   </widget>
-   <widget class="QPushButton" name="btnSalvar">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>60</y>
-      <width>181</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Abre o seu gerenciador de arquivos e permite que você escolha um lugar para salvar a imagem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Salvar</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnCinza">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>141</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica o efeito de &amp;quot;Escala Cinza&amp;quot; na imagem carregada.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Tons de Cinza</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnBinarizar">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica o efeito de &amp;quot;Binário&amp;quot;(255 ou 0) dependendo do valor informado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Binarização</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="edtLimiar">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>60</y>
-      <width>51</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Valor para a Binarização.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>128</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnCarregar">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>30</y>
-      <width>181</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Abre o seu gerenciador de arquivos para escolher uma imagem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Carregar Imagem</string>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="lblTxtOriginal">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>740</x>
       <y>0</y>
       <width>111</width>
       <height>18</height>
@@ -163,7 +104,7 @@
    <widget class="QLabel" name="lblTxtProcessada">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>740</x>
       <y>280</y>
       <width>111</width>
       <height>18</height>
@@ -173,77 +114,13 @@
      <string>Imagem Editada:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lblTxtEfeitos">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>101</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Efeitos &amp; Filtros</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnPassaBaixas">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>90</y>
-      <width>141</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica o filtro de &amp;quot;Passa Baixas&amp;quot;, mais conhecido como Blur/Borrão.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Suavização</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnHistograma">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>260</y>
-      <width>141</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera o &amp;quot;Histograma&amp;quot;, que exibe como as cores são distribuidas na imagem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Gerar Histograma</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lblTxtTecnica">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>240</y>
-      <width>81</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Área Tecnica</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="lblHistograma">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>290</y>
-      <width>291</width>
-      <height>251</height>
+      <y>300</y>
+      <width>250</width>
+      <height>250</height>
      </rect>
     </property>
     <property name="cursor">
@@ -252,6 +129,9 @@
     <property name="frameShape">
      <enum>QFrame::Shape::Box</enum>
     </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Raised</enum>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -259,106 +139,518 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnBrilho">
+   <widget class="QGroupBox" name="grpBoxManipulacao">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>120</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtro para aumentar/diminuir o brilho de acordo com o valor informado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Brilho</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="edtBrilho">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>120</y>
-      <width>51</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Caixinha para informar o valor do aumento de brilho, para diminuir o brilho informe um valor negativo (ex: -32).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>64</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="edtQuantizacao">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>150</y>
-      <width>51</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Valor que sera utilizado para a quantização.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>16</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnQuantizacao">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>150</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplique o efeito de quantização de acordo com o valor informado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Quantização</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnMediana">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>180</y>
-      <width>141</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica o filtro mediana na foto, bem similar ao de suavização porem de uma forma que preserva melhor a qualidade original da imagem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Mediana</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lblTxtArquivos">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
       <y>10</y>
-      <width>181</width>
-      <height>21</height>
+      <width>161</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Manipulação</string>
+    </property>
+    <widget class="QPushButton" name="btnCinza">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>131</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Converte a imagem colorida para uma escala de cinza, calculando a média dos canais RGB.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Tons de Cinza</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBinarizar">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>81</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Transforma a imagem em preto e branco absoluto, separando os pixels pelo valor do limiar (Threshold).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Binarização</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBrilho">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>81</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clareia ou escurece a imagem somando uma constante matemática a todos os pixels.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Brilho</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="edtBrilho">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>90</y>
+       <width>41</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Valor para o Brilho (Aceita Negativos).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>128</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnQuantizacao">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>81</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Achata a escala de cores, reduzindo a imagem a poucos tons (efeito de posterização ou degraus).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Quantização</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="edtQuantizacao">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>120</y>
+       <width>41</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Valor para a Quantização.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="edtLimiar">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>60</y>
+       <width>41</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Valor para a Binarização.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>68</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnAplicarMascara">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>150</y>
+       <width>131</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica uma segunda imagem como máscara (Operação Lógica AND). As áreas escuras da máscara escondem a foto original, enquanto as áreas claras a revelam.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Mascarar</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="grpBoxAltas">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>10</y>
+      <width>161</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Passa-Alta</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="grpBoxTransformacoes">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>120</y>
+      <width>141</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Transformações</string>
+    </property>
+    <widget class="QPushButton" name="btnEspelhar">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>121</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Inverte a imagem horizontalmente (efeito de espelho)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Espelhar</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnRotacionar90">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>121</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gira a imagem atual em 90 graus no sentido horário.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Rotacionar</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="grpBoxAnalise">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>460</y>
+      <width>161</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Análise</string>
+    </property>
+    <widget class="QPushButton" name="btnHistograma">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera o gráfico mostrando a distribuição da quantidade de pixels por tom de cinza na imagem original.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Histograma (O)</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnHistogramaProcessada">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera o gráfico da imagem processada para você comparar matematicamente o efeito do filtro aplicado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Histograma (E)</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="grpBoxBaixas">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>10</y>
+      <width>161</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Passa-Baixas</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <widget class="QPushButton" name="btnPassaBaixas">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Suaviza a imagem (efeito de borrão) calculando a média de cores dos pixels vizinhos numa matriz 3x3.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Média</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnMediana">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Excelente para remover ruídos isolados (&amp;quot;sal e pimenta&amp;quot;) preservando as linhas de contorno da imagem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Mediana</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnGaussiano">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aplica um desfoque suave e natural, dando maior peso matemático ao pixel central da matriz.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Gaussiano</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnOrdemK">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>150</y>
+       <width>86</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtro não-linear. Use K=0 para expandir áreas escuras (Mínimo) ou K=8 para expandir áreas claras (Máximo)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>K</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="edtK">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>150</y>
+       <width>41</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Valor para o &amp;quot;K&amp;quot;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnModa">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Substitui o pixel pela cor que mais se repete na sua vizinhança 3x3. Excelente para uniformizar texturas e remover ruídos.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Moda</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="cbTamanhoKernel">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>30</y>
+       <width>81</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>WhatsThisCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Define o alcance do filtro: tamanhos menores (3x3) mantêm mais detalhes, enquanto tamanhos maiores (9x9) aplicam um efeito de suavização ou borrão muito mais intenso (Não afeta o &amp;quot;Gaussiano&amp;quot;).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>3x3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>5x5</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>7x7</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>9x9</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="lblTxtKernel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>51</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Kernel:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="grpBoxArquivos">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>10</y>
+      <width>141</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Arquivamento</string>
+    </property>
+    <widget class="QPushButton" name="btnCarregar">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>121</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Abre uma nova imagem do seu computador para ser processada.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Carregar Imagem</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSalvar">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>121</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Salva a imagem resultante (processada) no seu computador.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Salvar</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="lblTxtHistograma">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>280</y>
+      <width>91</width>
+      <height>18</height>
      </rect>
     </property>
     <property name="text">
-     <string>Gerenciamento de Arquivo(s)</string>
+     <string>Histograma(s)</string>
     </property>
    </widget>
   </widget>
@@ -367,7 +659,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1000</width>
      <height>23</height>
     </rect>
    </property>

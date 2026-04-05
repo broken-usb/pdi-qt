@@ -36,6 +36,20 @@ private slots:
 
     void on_btnMediana_clicked();
 
+    void on_btnGaussiano_clicked();
+
+    void on_btnOrdemK_clicked();
+
+    void on_btnEspelhar_clicked();
+
+    void on_btnRotacionar90_clicked();
+
+    void on_btnHistogramaProcessada_clicked();
+
+    void on_btnAplicarMascara_clicked();
+
+    void on_btnModa_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
