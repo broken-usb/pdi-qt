@@ -95,7 +95,7 @@ jobs:
         chmod a+x linuxdeployqt-continuous-x86_64.AppImage
         ./linuxdeployqt-continuous-x86_64.AppImage AppDir/usr/share/applications/PDI-qt.desktop -appimage
         
-        mv PDI_Qt*.AppImage PDI-Qt-Linux.AppImage
+        mv PDI-Qt*.AppImage PDI-Qt-Linux.AppImage
 
     - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4
