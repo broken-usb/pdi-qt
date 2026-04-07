@@ -60,8 +60,7 @@ jobs:
   # 2. BUILD LINUX (Gera o .AppImage)
   # ==========================================
   build-linux:
-    # Usamos o Ubuntu 20.04 para garantir que o AppImage rode em distribuições mais antigas e novas
-    runs-on: ubuntu-20.04 
+    runs-on: ubuntu-latest 
     steps:
     - uses: actions/checkout@v4
 
