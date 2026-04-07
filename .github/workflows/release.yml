@@ -1,6 +1,5 @@
 name: Gerar Release Portatil
 
-# O "workflow_dispatch" cria um botão no GitHub para você disparar manualmente
 on:
   workflow_dispatch:
     inputs:
@@ -9,7 +8,6 @@ on:
         required: true
         default: 'v1.0.0'
 
-# Permissão necessária para o GitHub Actions criar a página de Release
 permissions:
   contents: write
 
@@ -38,16 +36,12 @@ jobs:
     - name: Empacotar Executavel (windeployqt)
       shell: pwsh
       run: |
-        # Cria uma pasta de deploy e copia o exe para lá
-        # IMPORTANTE: Confirme se o nome do seu executável é "pdi-qt.exe" mesmo. 
-        # Se for "ProjetoPDI.exe", altere aqui!
         mkdir deploy
-        copy build\Release\pdi-qt.exe deploy\
+        # Alterado para respeitar as maiúsculas do CMakeLists.txt
+        copy build\Release\PDI-qt.exe deploy\
         
-        # O windeployqt busca todas as DLLs do Qt e joga na pasta
-        windeployqt --release --compiler-runtime deploy\pdi-qt.exe
+        windeployqt --release --compiler-runtime deploy\PDI-qt.exe
         
-        # Zipa a pasta para ficar portátil
         Compress-Archive -Path deploy\* -DestinationPath PDI-Qt-Windows.zip
 
     - name: Upload Windows Artifact
@@ -82,29 +76,25 @@ jobs:
 
     - name: Criar AppImage (linuxdeployqt)
       run: |
-        # Prepara a estrutura de pastas do AppImage
         mkdir -p AppDir/usr/bin AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
         
-        # Copia o executável (Altere 'pdi-qt' se o nome do seu projeto for outro)
-        cp build/pdi-qt AppDir/usr/bin/
+        # Corrigido: 'PDI-qt' com maiúsculas exatamente como no CMakeLists.txt
+        cp build/PDI-qt AppDir/usr/bin/
         
-        # Cria um arquivo Desktop (necessário para o Linux reconhecer como App)
-        echo "[Desktop Entry]" > AppDir/usr/share/applications/pdi-qt.desktop
-        echo "Name=PDI-Qt" >> AppDir/usr/share/applications/pdi-qt.desktop
-        echo "Exec=pdi-qt" >> AppDir/usr/share/applications/pdi-qt.desktop
-        echo "Icon=pdi-qt" >> AppDir/usr/share/applications/pdi-qt.desktop
-        echo "Type=Application" >> AppDir/usr/share/applications/pdi-qt.desktop
-        echo "Categories=Graphics;" >> AppDir/usr/share/applications/pdi-qt.desktop
+        # Criação do atalho Linux com o nome do executável exato
+        echo "[Desktop Entry]" > AppDir/usr/share/applications/PDI-qt.desktop
+        echo "Name=PDI-Qt" >> AppDir/usr/share/applications/PDI-qt.desktop
+        echo "Exec=PDI-qt" >> AppDir/usr/share/applications/PDI-qt.desktop
+        echo "Icon=PDI-qt" >> AppDir/usr/share/applications/PDI-qt.desktop
+        echo "Type=Application" >> AppDir/usr/share/applications/PDI-qt.desktop
+        echo "Categories=Graphics;" >> AppDir/usr/share/applications/PDI-qt.desktop
         
-        # Ícone vazio temporário para não dar erro
-        touch AppDir/usr/share/icons/hicolor/256x256/apps/pdi-qt.png
+        touch AppDir/usr/share/icons/hicolor/256x256/apps/PDI-qt.png
         
-        # Baixa e roda o linuxdeployqt
         wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
         chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-        ./linuxdeployqt-continuous-x86_64.AppImage AppDir/usr/share/applications/pdi-qt.desktop -appimage
+        ./linuxdeployqt-continuous-x86_64.AppImage AppDir/usr/share/applications/PDI-qt.desktop -appimage
         
-        # Renomeia o resultado para o nome final
         mv PDI_Qt*.AppImage PDI-Qt-Linux.AppImage
 
     - name: Upload Linux Artifact
