@@ -307,6 +307,25 @@
     <property name="title">
      <string>Passa-Alta</string>
     </property>
+    <widget class="QPushButton" name="btnSobel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Detecta e destaca os contornos da imagem usando o Operador de Sobel (Cálculo de gradientes X e Y).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Sobel (Bordas)</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="grpBoxTransformacoes">
     <property name="geometry">

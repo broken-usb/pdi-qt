@@ -50,6 +50,8 @@ private slots:
 
     void on_btnModa_clicked();
 
+    void on_btnSobel_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

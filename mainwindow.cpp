@@ -664,3 +664,76 @@ void MainWindow::on_btnModa_clicked()
     }
     ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
 }
+
+void MainWindow::on_btnSobel_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    QImage imgOriginal = pixmapOriginal.toImage();
+    QImage imgProcessada = imgOriginal.copy();
+
+    int largura = imgOriginal.width();
+    int altura = imgOriginal.height();
+
+    // Matriz de Sobel para detectar bordas Verticais (Eixo X)
+    int Gx[3][3] = {
+        {-1, 0, 1},
+        {-2, 0, 2},
+        {-1, 0, 1}
+    };
+
+    // Matriz de Sobel para detectar bordas Horizontais (Eixo Y)
+    int Gy[3][3] = {
+        {-1, -2, -1},
+        { 0,  0,  0},
+        { 1,  2,  1}
+    };
+
+    // Varredura da imagem ignorando a borda de 1 pixel
+    for (int y = 1; y < altura - 1; y++) {
+        for (int x = 1; x < largura - 1; x++) {
+
+            int somaRx = 0, somaGx = 0, somaBx = 0;
+            int somaRy = 0, somaGy = 0, somaBy = 0;
+
+            // Varredura do Kernel 3x3
+            for (int ky = -1; ky <= 1; ky++) {
+                for (int kx = -1; kx <= 1; kx++) {
+                    QColor cor = imgOriginal.pixelColor(x + kx, y + ky);
+
+                    int pesoX = Gx[ky + 1][kx + 1];
+                    int pesoY = Gy[ky + 1][kx + 1];
+
+                    // Acumula os valores de X
+                    somaRx += cor.red() * pesoX;
+                    somaGx += cor.green() * pesoX;
+                    somaBx += cor.blue() * pesoX;
+
+                    // Acumula os valores de Y
+                    somaRy += cor.red() * pesoY;
+                    somaGy += cor.green() * pesoY;
+                    somaBy += cor.blue() * pesoY;
+                }
+            }
+
+            // Calcula a Magnitude G = Raiz(Gx^2 + Gy^2) para cada canal
+            int magR = std::sqrt(somaRx * somaRx + somaRy * somaRy);
+            int magG = std::sqrt(somaGx * somaGx + somaGy * somaGy);
+            int magB = std::sqrt(somaBx * somaBx + somaBy * somaBy);
+
+            // Garante que o valor não ultrapasse o branco máximo (255)
+            magR = qBound(0, magR, 255);
+            magG = qBound(0, magG, 255);
+            magB = qBound(0, magB, 255);
+
+            imgProcessada.setPixelColor(x, y, QColor(magR, magG, magB));
+        }
+    }
+
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
+
