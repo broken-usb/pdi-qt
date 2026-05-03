@@ -25,7 +25,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// pega uma imagem e mostra na esquerda
+// pega uma imagem, ajusta para resolução HD (720p) e mostra na esquerda
 void MainWindow::on_btnCarregar_clicked()
 {
     QString nomeArquivo = QFileDialog::getOpenFileName(this,
@@ -42,12 +42,18 @@ void MainWindow::on_btnCarregar_clicked()
         return;
     }
 
-    int larguraLabel = ui->lblOriginal->width();
-    int alturaLabel = ui->lblOriginal->height();
+    if (imagem.width() > 1280 || imagem.height() > 720) {
 
-    QPixmap imagemRedimensionada = imagem.scaled(larguraLabel, alturaLabel, Qt::KeepAspectRatio);
+        // Redimensiona a imagem aplicando duas regras importantes:
+        // Qt::KeepAspectRatio: Mantém a proporção para a imagem não ficar esticada.
+        // Qt::SmoothTransformation: Aplica suavização bilinear para não "serrilhar" as bordas.
+        imagem = imagem.scaled(1280, 720, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
 
-    ui->lblOriginal->setPixmap(imagemRedimensionada);
+    ui->lblOriginal->setPixmap(imagem);
+
+    ui->lblProcessada->clear();
+    ui->lblHistograma->clear();
 }
 
 // transforma a imagem em cinza
