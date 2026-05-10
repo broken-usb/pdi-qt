@@ -233,6 +233,8 @@ void MainWindow::on_btnHistograma_clicked()
     QPixmap grafico(256, 200);
     grafico.fill(Qt::white);
 
+    if (valorMaximo == 0) return;
+
     QPainter pintor(&grafico);
     pintor.setPen(Qt::black);
 
@@ -414,6 +416,7 @@ void MainWindow::on_btnOrdemK_clicked()
     int N = ui->cbTamanhoKernel->currentText().split("x")[0].toInt();
     int totalPixels = N * N;
     int k = ui->edtK->text().toInt();
+    int offset = N / 2;
 
     if (k < 0 || k >= totalPixels) {
         QMessageBox::warning(this, "Aviso", "Para este tamanho de Kernel, K deve estar entre 0 e " + QString::number(totalPixels - 1));
@@ -426,13 +429,13 @@ void MainWindow::on_btnOrdemK_clicked()
     int largura = imgOriginal.width();
     int altura = imgOriginal.height();
 
-    for (int y = 1; y < altura - 1; y++) {
-        for (int x = 1; x < largura - 1; x++) {
+    for (int y = offset; y < altura - offset; y++) {
+        for (int x = offset; x < largura - offset; x++) {
 
             std::vector<int> valoresR, valoresG, valoresB;
 
-            for (int ky = -1; ky <= 1; ky++) {
-                for (int kx = -1; kx <= 1; kx++) {
+            for (int ky = -offset; ky <= offset; ky++) {
+                for (int kx = -offset; kx <= offset; kx++) {
                     QColor cor = imgOriginal.pixelColor(x + kx, y + ky);
                     valoresR.push_back(cor.red());
                     valoresG.push_back(cor.green());
@@ -555,6 +558,8 @@ void MainWindow::on_btnHistogramaProcessada_clicked()
     QPixmap grafico(256, 200);
     grafico.fill(Qt::white);
 
+    if (valorMaximo == 0) return;
+
     QPainter pintor(&grafico);
     pintor.setPen(Qt::black);
 
@@ -623,7 +628,10 @@ void MainWindow::on_btnAplicarMascara_clicked()
 void MainWindow::on_btnModa_clicked()
 {
     QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
-    if (pixmapOriginal.isNull()) return;
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
 
     int N = ui->cbTamanhoKernel->currentText().split("x")[0].toInt();
     int offset = N / 2;
@@ -726,10 +734,9 @@ void MainWindow::on_btnSobel_clicked()
                 }
             }
 
-            // Calcula a Magnitude G = Raiz(Gx^2 + Gy^2) para cada canal
-            int magR = std::sqrt(somaRx * somaRx + somaRy * somaRy);
-            int magG = std::sqrt(somaGx * somaGx + somaGy * somaGy);
-            int magB = std::sqrt(somaBx * somaBx + somaBy * somaBy);
+            int magR = static_cast<int>(std::sqrt(somaRx * somaRx + somaRy * somaRy));
+            int magG = static_cast<int>(std::sqrt(somaGx * somaGx + somaGy * somaGy));
+            int magB = static_cast<int>(std::sqrt(somaBx * somaBx + somaBy * somaBy));
 
             // Garante que o valor não ultrapasse o branco máximo (255)
             magR = qBound(0, magR, 255);
@@ -742,4 +749,3 @@ void MainWindow::on_btnSobel_clicked()
 
     ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
 }
-
