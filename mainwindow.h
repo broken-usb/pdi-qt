@@ -56,6 +56,8 @@ private slots:
 
     void on_btnPrewitt_clicked();
 
+    void on_btnHighBoost_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

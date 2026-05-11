@@ -869,3 +869,63 @@ void MainWindow::on_btnPrewitt_clicked()
     ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
 }
 
+void MainWindow::on_btnHighBoost_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    double A = ui->edtHighBoost->text().toDouble(); // Fator de intensidade (ex: 1.5)
+
+    QImage imgOriginal = pixmapOriginal.toImage();
+    QImage imgProcessada = imgOriginal.copy();
+
+    int largura = imgOriginal.width();
+    int altura = imgOriginal.height();
+
+    // Vamos usar um Passa-Baixas rápido (Média 3x3) para encontrar a versão borrada
+    for (int y = 1; y < altura - 1; y++) {
+        for (int x = 1; x < largura - 1; x++) {
+
+            int somaR = 0, somaG = 0, somaB = 0;
+
+            // 1. Calcula o Passa-Baixas (Borrado)
+            for (int ky = -1; ky <= 1; ky++) {
+                for (int kx = -1; kx <= 1; kx++) {
+                    QColor cor = imgOriginal.pixelColor(x + kx, y + ky);
+                    somaR += cor.red();
+                    somaG += cor.green();
+                    somaB += cor.blue();
+                }
+            }
+
+            int mediaR = somaR / 9;
+            int mediaG = somaG / 9;
+            int mediaB = somaB / 9;
+
+            QColor corOriginal = imgOriginal.pixelColor(x, y);
+
+            // 2. Encontra a "Máscara" (Detalhes = Original - Borrado)
+            int mascaraR = corOriginal.red() - mediaR;
+            int mascaraG = corOriginal.green() - mediaG;
+            int mascaraB = corOriginal.blue() - mediaB;
+
+            // 3. Aplica o HighBoost: Resultado = Original + (A * Máscara)
+            int novoR = corOriginal.red() + (A * mascaraR);
+            int novoG = corOriginal.green() + (A * mascaraG);
+            int novoB = corOriginal.blue() + (A * mascaraB);
+
+            // Garante que as cores fiquem entre 0 e 255
+            novoR = qBound(0, novoR, 255);
+            novoG = qBound(0, novoG, 255);
+            novoB = qBound(0, novoB, 255);
+
+            imgProcessada.setPixelColor(x, y, QColor(novoR, novoG, novoB));
+        }
+    }
+
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
+
