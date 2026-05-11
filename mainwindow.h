@@ -54,6 +54,8 @@ private slots:
 
     void on_btnLaplaciano_clicked();
 
+    void on_btnPrewitt_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

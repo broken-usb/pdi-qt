@@ -345,6 +345,25 @@
       <string>Laplaciano</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="btnPrewitt">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Detecta bordas usando gradientes X e Y (similar ao Sobel, mas com pesos uniformes nas matrizes).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Prewitt</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="grpBoxTransformacoes">
     <property name="geometry">

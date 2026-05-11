@@ -802,3 +802,70 @@ void MainWindow::on_btnLaplaciano_clicked()
     ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
 }
 
+void MainWindow::on_btnPrewitt_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    QImage imgOriginal = pixmapOriginal.toImage();
+    QImage imgProcessada = imgOriginal.copy();
+
+    int largura = imgOriginal.width();
+    int altura = imgOriginal.height();
+
+    // Matriz de Prewitt para Eixo X
+    int Gx[3][3] = {
+        {-1, 0, 1},
+        {-1, 0, 1},
+        {-1, 0, 1}
+    };
+
+    // Matriz de Prewitt para Eixo Y
+    int Gy[3][3] = {
+        {-1, -1, -1},
+        { 0,  0,  0},
+        { 1,  1,  1}
+    };
+
+    // Varredura da imagem
+    for (int y = 1; y < altura - 1; y++) {
+        for (int x = 1; x < largura - 1; x++) {
+
+            int somaRx = 0, somaGx = 0, somaBx = 0;
+            int somaRy = 0, somaGy = 0, somaBy = 0;
+
+            for (int ky = -1; ky <= 1; ky++) {
+                for (int kx = -1; kx <= 1; kx++) {
+                    QColor cor = imgOriginal.pixelColor(x + kx, y + ky);
+
+                    int pesoX = Gx[ky + 1][kx + 1];
+                    int pesoY = Gy[ky + 1][kx + 1];
+
+                    somaRx += cor.red() * pesoX;
+                    somaGx += cor.green() * pesoX;
+                    somaBx += cor.blue() * pesoX;
+
+                    somaRy += cor.red() * pesoY;
+                    somaGy += cor.green() * pesoY;
+                    somaBy += cor.blue() * pesoY;
+                }
+            }
+
+            int magR = std::sqrt(somaRx * somaRx + somaRy * somaRy);
+            int magG = std::sqrt(somaGx * somaGx + somaGy * somaGy);
+            int magB = std::sqrt(somaBx * somaBx + somaBy * somaBy);
+
+            magR = qBound(0, magR, 255);
+            magG = qBound(0, magG, 255);
+            magB = qBound(0, magB, 255);
+
+            imgProcessada.setPixelColor(x, y, QColor(magR, magG, magB));
+        }
+    }
+
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
+
