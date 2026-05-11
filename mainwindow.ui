@@ -119,7 +119,7 @@
      <rect>
       <x>10</x>
       <y>300</y>
-      <width>250</width>
+      <width>331</width>
       <height>250</height>
      </rect>
     </property>
@@ -454,7 +454,7 @@
    <widget class="QGroupBox" name="grpBoxAnalise">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>350</x>
       <y>460</y>
       <width>161</width>
       <height>91</height>
