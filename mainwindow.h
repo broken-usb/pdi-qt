@@ -52,6 +52,8 @@ private slots:
 
     void on_btnSobel_clicked();
 
+    void on_btnLaplaciano_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

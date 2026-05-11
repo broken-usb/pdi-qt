@@ -749,3 +749,56 @@ void MainWindow::on_btnSobel_clicked()
 
     ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
 }
+
+void MainWindow::on_btnLaplaciano_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    QImage imgOriginal = pixmapOriginal.toImage();
+    QImage imgProcessada = imgOriginal.copy();
+
+    int largura = imgOriginal.width();
+    int altura = imgOriginal.height();
+
+    // Matriz do Filtro Laplaciano (Centro 8)
+    int mascara[3][3] = {
+        {-1, -1, -1},
+        {-1,  8, -1},
+        {-1, -1, -1}
+    };
+
+    // Varredura da imagem ignorando a borda de 1 pixel
+    for (int y = 1; y < altura - 1; y++) {
+        for (int x = 1; x < largura - 1; x++) {
+
+            int somaR = 0, somaG = 0, somaB = 0;
+
+            // Varredura do Kernel 3x3
+            for (int ky = -1; ky <= 1; ky++) {
+                for (int kx = -1; kx <= 1; kx++) {
+                    QColor cor = imgOriginal.pixelColor(x + kx, y + ky);
+                    int peso = mascara[ky + 1][kx + 1];
+
+                    somaR += cor.red() * peso;
+                    somaG += cor.green() * peso;
+                    somaB += cor.blue() * peso;
+                }
+            }
+
+            // O Laplaciano pode gerar valores negativos muito fortes nas bordas.
+            // Usamos o std::abs para converter os negativos e qBound para limitar a 255.
+            int magR = qBound(0, std::abs(somaR), 255);
+            int magG = qBound(0, std::abs(somaG), 255);
+            int magB = qBound(0, std::abs(somaB), 255);
+
+            imgProcessada.setPixelColor(x, y, QColor(magR, magG, magB));
+        }
+    }
+
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
+

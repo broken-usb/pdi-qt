@@ -301,7 +301,7 @@
       <x>350</x>
       <y>10</y>
       <width>161</width>
-      <height>61</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="title">
@@ -324,6 +324,25 @@
      </property>
      <property name="text">
       <string>Sobel (Bordas)</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnLaplaciano">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtro isotrópico: encontra bordas em todas as direções de uma só vez usando uma matriz de centro positivo.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Laplaciano</string>
      </property>
     </widget>
    </widget>
