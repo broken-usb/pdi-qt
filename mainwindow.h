@@ -58,6 +58,8 @@ private slots:
 
     void on_btnHighBoost_clicked();
 
+    void on_btnEqualizar_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

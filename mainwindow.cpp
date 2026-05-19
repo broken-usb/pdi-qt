@@ -929,3 +929,51 @@ void MainWindow::on_btnHighBoost_clicked()
     ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
 }
 
+void MainWindow::on_btnEqualizar_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    QImage imgOriginal = pixmapOriginal.toImage();
+    QImage imgProcessada = imgOriginal.copy();
+    int largura = imgOriginal.width();
+    int altura = imgOriginal.height();
+    int totalPixels = largura * altura;
+
+    // 1. Calcular o Histograma Original (Frequência de cada nível de cinza)
+    int histograma[256] = {0};
+    for (int y = 0; y < altura; y++) {
+        for (int x = 0; x < largura; x++) {
+            QColor cor = imgOriginal.pixelColor(x, y);
+            int cinza = (cor.red() + cor.green() + cor.blue()) / 3;
+            histograma[cinza]++;
+        }
+    }
+
+    // 2. Calcular o Histograma Acumulado (CDF) e o Mapeamento
+    // Seguindo a teoria: NovoTom = (Acumulado * 255) / TotalPixels
+    int acumulado = 0;
+    int mapa[256] = {0};
+    for (int i = 0; i < 256; i++) {
+        acumulado += histograma[i];
+        mapa[i] = (acumulado * 255) / totalPixels;
+    }
+
+    // 3. Aplicar o mapeamento na imagem processada
+    for (int y = 0; y < altura; y++) {
+        for (int x = 0; x < largura; x++) {
+            QColor cor = imgOriginal.pixelColor(x, y);
+            int cinza = (cor.red() + cor.green() + cor.blue()) / 3;
+
+            // Substitui pelo novo tom equalizado
+            int novoCinza = mapa[cinza];
+            imgProcessada.setPixelColor(x, y, QColor(novoCinza, novoCinza, novoCinza));
+        }
+    }
+
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
+

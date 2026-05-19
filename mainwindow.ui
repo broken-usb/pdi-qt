@@ -399,6 +399,25 @@
       <string>1.5</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="btnEqualizar">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>150</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Maximiza o contraste da imagem redistribuindo os tons de cinza de forma uniforme usando um histograma acumulado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Equalização</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="grpBoxTransformacoes">
     <property name="geometry">
