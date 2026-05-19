@@ -60,6 +60,8 @@ private slots:
 
     void on_btnEqualizar_clicked();
 
+    void on_btnAscii_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

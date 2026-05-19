@@ -418,6 +418,25 @@
       <string>Equalização</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="btnAscii">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Converte a imagem numa obra de arte baseada em caracteres de texto (ASCII), do mais denso ao mais leve.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>ASCII Art</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="grpBoxTransformacoes">
     <property name="geometry">

@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <map>
 #include <cmath>
+#include <QFont>
+#include <QFontMetrics>
 
 // monta a janela principal e bloqueia maximizar
 MainWindow::MainWindow(QWidget *parent)
@@ -977,3 +979,65 @@ void MainWindow::on_btnEqualizar_clicked()
     ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
 }
 
+
+void MainWindow::on_btnAscii_clicked()
+{
+    QPixmap pixmapOriginal = ui->lblOriginal->pixmap();
+    if (pixmapOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
+
+    QImage imgOriginal = pixmapOriginal.toImage();
+
+    // 1. Reduzimos muito a imagem original para "pixelizá-la"
+    // Caso contrário, teríamos milhares de letras minúsculas ilegíveis
+    int larguraAscii = 150; // O número de "letras" na horizontal
+    QImage imgPequena = imgOriginal.scaledToWidth(larguraAscii, Qt::SmoothTransformation);
+    int larg = imgPequena.width();
+    int alt = imgPequena.height();
+
+    // 2. Mapa de Caracteres: do mais denso (preto) ao mais leve (branco)
+    QString caracteres = "@%#*+=-:. ";
+    int numChars = caracteres.length();
+
+    // 3. Geramos o texto linha a linha
+    QString textoFinal;
+    for (int y = 0; y < alt; y++) {
+        for (int x = 0; x < larg; x++) {
+            QColor cor = imgPequena.pixelColor(x, y);
+            int cinza = (cor.red() + cor.green() + cor.blue()) / 3;
+
+            // Mapeia o tom de cinza (0 a 255) para um índice de letra (0 a 9)
+            int indice = (cinza * (numChars - 1)) / 255;
+            textoFinal += caracteres[indice];
+        }
+        textoFinal += "\n";
+    }
+
+    // 4. Transformamos o Texto numa Imagem para mostrar no ecrã!
+    QFont fonte("Courier", 8); // Fonte monoespaçada é obrigatória no ASCII Art
+    QFontMetrics fm(fonte);
+
+    // Calculamos o tamanho do "quadro" branco baseado no tamanho das letras
+    int imgLargura = fm.horizontalAdvance("A") * larg;
+    int imgAltura = fm.height() * alt;
+
+    QImage imgProcessada(imgLargura, imgAltura, QImage::Format_RGB32);
+    imgProcessada.fill(Qt::white); // Fundo branco
+
+    QPainter pintor(&imgProcessada);
+    pintor.setFont(fonte);
+    pintor.setPen(Qt::black); // Letras pretas
+
+    // Desenhamos linha a linha
+    QStringList linhas = textoFinal.split("\n");
+    for (int i = 0; i < linhas.size(); i++) {
+        // O Y do drawText é medido pela base da letra, por isso multiplicamos por (i+1)
+        pintor.drawText(0, (i + 1) * fm.height(), linhas[i]);
+    }
+
+    // Adaptamos a imagem final para caber na nossa Label (usando a tua nova lógica 720p)
+    imgProcessada = imgProcessada.scaled(1280, 720, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->lblProcessada->setPixmap(QPixmap::fromImage(imgProcessada));
+}
