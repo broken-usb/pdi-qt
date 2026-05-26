@@ -85,7 +85,7 @@ int MainWindow::getKernelSize() const
 void MainWindow::on_btnCarregar_clicked()
 {
     QString nomeArquivo = QFileDialog::getOpenFileName(this,
-        "Abrir Imagem", "", "Imagens (*.png *.jpg *.jpeg *.bmp)");
+                                                       "Abrir Imagem", "", "Imagens (*.png *.jpg *.jpeg *.bmp)");
 
     if (nomeArquivo.isEmpty()) return;
 
@@ -100,7 +100,7 @@ void MainWindow::on_btnCarregar_clicked()
         imagem = imagem.scaled(1280, 720, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    m_imagemOriginal   = imagem.toImage();
+    m_imagemOriginal   = imagem.toImage().convertToFormat(QImage::Format_RGB32);
     m_imagemProcessada = QImage();
 
     ui->lblOriginal->setPixmap(imagem);
@@ -117,11 +117,11 @@ void MainWindow::on_btnSalvar_clicked()
     }
 
     QString nomeArquivo = QFileDialog::getSaveFileName(this,
-        "Salvar Imagem Processada", "", "Imagens PNG (*.png);;Imagens JPEG (*.jpg)");
+                                                       "Salvar Imagem Processada", "", "Imagens PNG (*.png);;Imagens JPEG (*.jpg)");
 
     if (nomeArquivo.isEmpty()) return;
 
-    if (QPixmap::fromImage(m_imagemProcessada).save(nomeArquivo)) {
+    if (m_imagemProcessada.save(nomeArquivo)) {
         QMessageBox::information(this, "Sucesso", "Imagem salva com sucesso!");
     } else {
         QMessageBox::critical(this, "Erro", "Ocorreu um problema ao salvar a imagem.");
@@ -292,8 +292,8 @@ void MainWindow::on_btnPassaBaixas_clicked()
                 }
             }
             imgProcessada.setPixelColor(x, y, QColor(somaR / totalPixels,
-                                                      somaG / totalPixels,
-                                                      somaB / totalPixels));
+                                                     somaG / totalPixels,
+                                                     somaB / totalPixels));
         }
     }
 
@@ -303,7 +303,10 @@ void MainWindow::on_btnPassaBaixas_clicked()
 // Aplica filtro de mediana no kernel NxN.
 void MainWindow::on_btnMediana_clicked()
 {
-    if (m_imagemOriginal.isNull()) return;
+    if (m_imagemOriginal.isNull()) {
+        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        return;
+    }
 
     int N = getKernelSize();
     int offset      = N / 2;
@@ -335,8 +338,8 @@ void MainWindow::on_btnMediana_clicked()
             std::sort(vB.begin(), vB.end());
 
             imgProcessada.setPixelColor(x, y, QColor(vR[totalPixels / 2],
-                                                      vG[totalPixels / 2],
-                                                      vB[totalPixels / 2]));
+                                                     vG[totalPixels / 2],
+                                                     vB[totalPixels / 2]));
         }
     }
 
@@ -390,8 +393,8 @@ void MainWindow::on_btnGaussiano_clicked()
             }
 
             imgProcessada.setPixelColor(x, y, QColor(qBound(0, (int)somaR, 255),
-                                                      qBound(0, (int)somaG, 255),
-                                                      qBound(0, (int)somaB, 255)));
+                                                     qBound(0, (int)somaG, 255),
+                                                     qBound(0, (int)somaB, 255)));
         }
     }
 
@@ -413,8 +416,8 @@ void MainWindow::on_btnOrdemK_clicked()
 
     if (k < 0 || k >= totalPixels) {
         QMessageBox::warning(this, "Aviso",
-            "Para este tamanho de Kernel, K deve estar entre 0 e "
-            + QString::number(totalPixels - 1));
+                             "Para este tamanho de Kernel, K deve estar entre 0 e "
+                                 + QString::number(totalPixels - 1));
         return;
     }
 
@@ -495,9 +498,9 @@ void MainWindow::on_btnModa_clicked()
             };
 
             imgProcessada.setPixelColor(x, y, QColor(
-                calcularModa(freqR, corCentro.red()),
-                calcularModa(freqG, corCentro.green()),
-                calcularModa(freqB, corCentro.blue())));
+                                                  calcularModa(freqR, corCentro.red()),
+                                                  calcularModa(freqG, corCentro.green()),
+                                                  calcularModa(freqB, corCentro.blue())));
         }
     }
 
@@ -558,8 +561,8 @@ void MainWindow::on_btnSobel_clicked()
             int magB = static_cast<int>(std::sqrt(somaBx * somaBx + somaBy * somaBy));
 
             imgProcessada.setPixelColor(x, y, QColor(qBound(0, magR, 255),
-                                                      qBound(0, magG, 255),
-                                                      qBound(0, magB, 255)));
+                                                     qBound(0, magG, 255),
+                                                     qBound(0, magB, 255)));
         }
     }
 
@@ -602,8 +605,8 @@ void MainWindow::on_btnLaplaciano_clicked()
 
             // Converte negativo para positivo e limita a [0,255].
             imgProcessada.setPixelColor(x, y, QColor(qBound(0, std::abs(somaR), 255),
-                                                      qBound(0, std::abs(somaG), 255),
-                                                      qBound(0, std::abs(somaB), 255)));
+                                                     qBound(0, std::abs(somaG), 255),
+                                                     qBound(0, std::abs(somaB), 255)));
         }
     }
 
@@ -663,8 +666,8 @@ void MainWindow::on_btnPrewitt_clicked()
             int magB = static_cast<int>(std::sqrt(somaBx * somaBx + somaBy * somaBy));
 
             imgProcessada.setPixelColor(x, y, QColor(qBound(0, magR, 255),
-                                                      qBound(0, magG, 255),
-                                                      qBound(0, magB, 255)));
+                                                     qBound(0, magG, 255),
+                                                     qBound(0, magB, 255)));
         }
     }
 
@@ -766,8 +769,8 @@ void MainWindow::on_btnEqualizar_clicked()
         for (int x = 0; x < largura; x++) {
             QColor cor = imgOriginal.pixelColor(x, y);
             imgProcessada.setPixelColor(x, y, QColor(mapaR[cor.red()],
-                                                      mapaG[cor.green()],
-                                                      mapaB[cor.blue()]));
+                                                     mapaG[cor.green()],
+                                                     mapaB[cor.blue()]));
         }
     }
 
@@ -839,7 +842,7 @@ void MainWindow::on_btnAplicarMascara_clicked()
     }
 
     QString nomeArquivo = QFileDialog::getOpenFileName(this,
-        "Escolher Imagem de Máscara", "", "Imagens (*.png *.jpg *.bmp *.jpeg)");
+                                                       "Escolher Imagem de Máscara", "", "Imagens (*.png *.jpg *.bmp *.jpeg)");
 
     if (nomeArquivo.isEmpty()) return;
 
@@ -849,7 +852,7 @@ void MainWindow::on_btnAplicarMascara_clicked()
         return;
     }
 
-    imgMascara = imgMascara.scaled(imgBase.width(), imgBase.height(), Qt::IgnoreAspectRatio);
+    imgMascara = imgMascara.scaled(imgBase.width(), imgBase.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     QImage imgProcessada = imgBase.copy();
 
@@ -887,11 +890,13 @@ void MainWindow::on_btnAscii_clicked()
     int charW = fm.horizontalAdvance('M');
     int charH = fm.height();
 
+    if (charW <= 0 || charH <= 0) return;
+
     // Define tamanho da grade para ASCII.
     int larguraAscii = 150;
 
     // Ajusta altura para a proporção da fonte.
-    int alturaAscii = (imgOriginal.height() * larguraAscii * charW) / (imgOriginal.width() * charH);
+    int alturaAscii = qMax(1, (imgOriginal.height() * larguraAscii * charW) / (imgOriginal.width() * charH));
 
     // Redimensiona usando a proporção compensada.
     QImage imgPequena = imgOriginal.scaled(larguraAscii, alturaAscii, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
