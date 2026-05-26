@@ -928,17 +928,7 @@ void MainWindow::on_btnAscii_clicked()
 
     QImage imgOriginal = m_imagemOriginal;
 
-    // 1. Reduz a imagem para criar a grade de caracteres
-    int larguraAscii = 150;
-    QImage imgPequena = imgOriginal.scaledToWidth(larguraAscii, Qt::SmoothTransformation);
-
-    int larg = imgPequena.width();
-    int alt  = imgPequena.height();
-
-    // 2. Mapa de caracteres: do mais denso (preto) ao mais leve (branco)
-    const QString chars = "@%#*+=-:. ";
-    int numChars = chars.length();
-
+    // 1. Pegamos a fonte primeiro para saber as proporções do caractere
     QFont fonte("Courier", 5);
     fonte.setStyleHint(QFont::Monospace);
     QFontMetrics fm(fonte);
@@ -946,7 +936,24 @@ void MainWindow::on_btnAscii_clicked()
     int charW = fm.horizontalAdvance('M');
     int charH = fm.height();
 
-    // 3. Cria a imagem de saída com fundo preto
+    // 2. Calcula o tamanho da grade compensando o "esticamento" da fonte
+    int larguraAscii = 150;
+
+    // A mágica acontece aqui: multiplicamos a altura pelo fator (charW / charH)
+    // para compensar o fato de que a letra é mais alta do que larga.
+    int alturaAscii = (imgOriginal.height() * larguraAscii * charW) / (imgOriginal.width() * charH);
+
+    // Redimensiona ignorando a proporção original, pois já calculamos a proporção compensada
+    QImage imgPequena = imgOriginal.scaled(larguraAscii, alturaAscii, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+    int larg = imgPequena.width();
+    int alt  = imgPequena.height();
+
+    // 3. Mapa de caracteres: do mais denso (preto) ao mais leve (branco)
+    const QString chars = "@%#*+=-:. ";
+    int numChars = chars.length();
+
+    // 4. Cria a imagem de saída com fundo preto (tamanho final exato da grade * letras)
     QImage imgAscii(larg * charW, alt * charH, QImage::Format_RGB32);
     imgAscii.fill(Qt::black);
 
