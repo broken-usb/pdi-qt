@@ -11,11 +11,7 @@
 #include <map>
 #include <cmath>
 
-// ─────────────────────────────────────────────────────────────
-//  Construtor / Destrutor
-// ─────────────────────────────────────────────────────────────
-
-// Monta a janela principal e bloqueia o botão de maximizar.
+// Construtor da janela principal.
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -25,27 +21,21 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowMaximizeButtonHint);
 }
 
-// Libera a interface gerada pelo Qt Designer.
+// Limpa a interface do Qt Designer.
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Helpers privados
-// ─────────────────────────────────────────────────────────────
+// Funções auxiliares.
 
-// Fórmula perceptual ITU-R BT.601.
-// O olho humano é mais sensível ao verde (~59%) do que ao vermelho (~30%)
-// e muito menos ao azul (~11%). Usar (r+g+b)/3 ignora isso e produz
-// resultados visivelmente mais escuros/claros do que o esperado.
+// Valor de cinza perceptual.
 int MainWindow::grayValue(const QColor &cor)
 {
     return qRound(0.299 * cor.red() + 0.587 * cor.green() + 0.114 * cor.blue());
 }
 
-// Desenha o histograma de luminância de 'img' no label de histograma.
-// Evita duplicar o mesmo bloco de ~25 linhas em dois slots diferentes.
+// Desenha o histograma de luminância.
 void MainWindow::drawHistogram(const QImage &img)
 {
     int largura = img.width();
@@ -78,27 +68,20 @@ void MainWindow::drawHistogram(const QImage &img)
     ui->lblHistograma->setPixmap(grafico);
 }
 
-// Salva 'img' em m_imagemProcessada e exibe no painel direito.
-// Todos os slots de processamento passam por aqui, garantindo
-// que a variável e o label estejam sempre sincronizados.
+// Atualiza a imagem processada e mostra no painel.
 void MainWindow::setProcessedImage(const QImage &img)
 {
     m_imagemProcessada = img;
     ui->lblProcessada->setPixmap(QPixmap::fromImage(img));
 }
 
-// Lê o tamanho N do kernel a partir do combo (ex: "3x3" → 3).
+// Retorna o tamanho do kernel selecionado.
 int MainWindow::getKernelSize() const
 {
     return ui->cbTamanhoKernel->currentText().split("x")[0].toInt();
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Carregar / Salvar
-// ─────────────────────────────────────────────────────────────
-
-// Abre um arquivo de imagem, redimensiona se necessário e exibe.
-// Também guarda a imagem em m_imagemOriginal para acesso posterior.
+// Carrega imagem e atualiza os labels.
 void MainWindow::on_btnCarregar_clicked()
 {
     QString nomeArquivo = QFileDialog::getOpenFileName(this,
@@ -113,8 +96,7 @@ void MainWindow::on_btnCarregar_clicked()
     }
 
     if (imagem.width() > 1280 || imagem.height() > 720) {
-        // Qt::KeepAspectRatio: mantém a proporção para a imagem não ficar esticada.
-        // Qt::SmoothTransformation: aplica suavização bilinear para não serrilhar as bordas.
+        // Redimensiona mantendo proporção e suavizando.
         imagem = imagem.scaled(1280, 720, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
@@ -126,7 +108,7 @@ void MainWindow::on_btnCarregar_clicked()
     ui->lblHistograma->clear();
 }
 
-// Salva a imagem processada em disco.
+// Salva a imagem processada.
 void MainWindow::on_btnSalvar_clicked()
 {
     if (m_imagemProcessada.isNull()) {
@@ -146,9 +128,7 @@ void MainWindow::on_btnSalvar_clicked()
     }
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Histogramas
-// ─────────────────────────────────────────────────────────────
+// Histogramas.
 
 // Gera o histograma da imagem original.
 void MainWindow::on_btnHistograma_clicked()
@@ -170,11 +150,9 @@ void MainWindow::on_btnHistogramaProcessada_clicked()
     drawHistogram(m_imagemProcessada);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Manipulação básica
-// ─────────────────────────────────────────────────────────────
+// Manipulação básica.
 
-// Converte a imagem original para escala de cinza.
+// Converte a imagem original para tons de cinza.
 void MainWindow::on_btnCinza_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -196,7 +174,7 @@ void MainWindow::on_btnCinza_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Binariza a imagem com o limiar informado pelo usuário.
+// Binariza a imagem com base no limiar.
 void MainWindow::on_btnBinarizar_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -220,7 +198,7 @@ void MainWindow::on_btnBinarizar_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Ajusta o brilho somando uma constante a cada canal RGB.
+// Ajusta o brilho de cada canal RGB.
 void MainWindow::on_btnBrilho_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -246,7 +224,7 @@ void MainWindow::on_btnBrilho_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Reduz a paleta de cores ao número de níveis indicado.
+// Quantiza a imagem em níveis de cor.
 void MainWindow::on_btnQuantizacao_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -283,11 +261,9 @@ void MainWindow::on_btnQuantizacao_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Filtros Passa-Baixas
-// ─────────────────────────────────────────────────────────────
+// Filtros passa-baixas.
 
-// Filtro de média: substitui cada pixel pela média dos vizinhos no kernel NxN.
+// Aplica média no kernel NxN.
 void MainWindow::on_btnPassaBaixas_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -324,7 +300,7 @@ void MainWindow::on_btnPassaBaixas_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Filtro de mediana: substitui cada pixel pela mediana dos vizinhos no kernel NxN.
+// Aplica filtro de mediana no kernel NxN.
 void MainWindow::on_btnMediana_clicked()
 {
     if (m_imagemOriginal.isNull()) return;
@@ -367,10 +343,7 @@ void MainWindow::on_btnMediana_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Filtro Gaussiano com kernel NxN gerado dinamicamente.
-// Melhoria: o código original usava um kernel 3x3 hardcoded e ignorava
-// o combo de tamanho. Agora o kernel é calculado para qualquer N usando
-// sigma = N/6.0 (regra prática para conter 99.7% da distribuição no kernel).
+// Aplica filtro Gaussiano com kernel NxN gerado dinamicamente.
 void MainWindow::on_btnGaussiano_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -382,7 +355,7 @@ void MainWindow::on_btnGaussiano_clicked()
     int offset = N / 2;
     double sigma = N / 6.0;
 
-    // Gera e normaliza o kernel Gaussiano
+    // Gera e normaliza o kernel Gaussiano.
     std::vector<std::vector<double>> kernel(N, std::vector<double>(N));
     double somaKernel = 0.0;
 
@@ -425,7 +398,7 @@ void MainWindow::on_btnGaussiano_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Filtro de Ordem K: seleciona o k-ésimo menor valor do kernel (ordenado).
+// Aplica filtro de ordem K.
 void MainWindow::on_btnOrdemK_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -477,7 +450,7 @@ void MainWindow::on_btnOrdemK_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Filtro de moda: substitui cada pixel pelo valor mais frequente no kernel.
+// Aplica filtro de moda.
 void MainWindow::on_btnModa_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -531,11 +504,9 @@ void MainWindow::on_btnModa_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Filtros de Detecção de Bordas (Passa-Altas)
-// ─────────────────────────────────────────────────────────────
+// Filtros de borda.
 
-// Detector de bordas de Sobel (magnitude do gradiente).
+// Aplica Sobel.
 void MainWindow::on_btnSobel_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -548,13 +519,13 @@ void MainWindow::on_btnSobel_clicked()
     int largura = imgOriginal.width();
     int altura  = imgOriginal.height();
 
-    // Matriz de Sobel para detectar bordas Verticais (Eixo X)
+    // Sobel X.
     int Gx[3][3] = {
         {-1, 0, 1},
         {-2, 0, 2},
         {-1, 0, 1}
     };
-    // Matriz de Sobel para detectar bordas Horizontais (Eixo Y)
+    // Sobel Y.
     int Gy[3][3] = {
         {-1, -2, -1},
         { 0,  0,  0},
@@ -595,7 +566,7 @@ void MainWindow::on_btnSobel_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Detector de bordas Laplaciano (segunda derivada).
+// Aplica Laplaciano.
 void MainWindow::on_btnLaplaciano_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -608,7 +579,7 @@ void MainWindow::on_btnLaplaciano_clicked()
     int largura = imgOriginal.width();
     int altura  = imgOriginal.height();
 
-    // Máscara Laplaciana com centro 8 (detecta bordas em todas as direções)
+    // Kernel Laplaciano.
     int mascara[3][3] = {
         {-1, -1, -1},
         {-1,  8, -1},
@@ -629,8 +600,7 @@ void MainWindow::on_btnLaplaciano_clicked()
                 }
             }
 
-            // O Laplaciano produz valores negativos nas bordas.
-            // std::abs converte os negativos e qBound limita a [0, 255].
+            // Converte negativo para positivo e limita a [0,255].
             imgProcessada.setPixelColor(x, y, QColor(qBound(0, std::abs(somaR), 255),
                                                       qBound(0, std::abs(somaG), 255),
                                                       qBound(0, std::abs(somaB), 255)));
@@ -640,7 +610,7 @@ void MainWindow::on_btnLaplaciano_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Detector de bordas de Prewitt (semelhante ao Sobel, pesos uniformes).
+// Aplica Prewitt.
 void MainWindow::on_btnPrewitt_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -653,13 +623,13 @@ void MainWindow::on_btnPrewitt_clicked()
     int largura = imgOriginal.width();
     int altura  = imgOriginal.height();
 
-    // Matriz de Prewitt para Eixo X
+    // Prewitt X.
     int Gx[3][3] = {
         {-1, 0, 1},
         {-1, 0, 1},
         {-1, 0, 1}
     };
-    // Matriz de Prewitt para Eixo Y
+    // Prewitt Y.
     int Gy[3][3] = {
         {-1, -1, -1},
         { 0,  0,  0},
@@ -687,8 +657,7 @@ void MainWindow::on_btnPrewitt_clicked()
                 }
             }
 
-            // Correção: o código original atribuía std::sqrt (double) a int sem
-            // static_cast, o que é uma conversão implícita potencialmente imprecisa.
+            // Converte resultado de sqrt para inteiro.
             int magR = static_cast<int>(std::sqrt(somaRx * somaRx + somaRy * somaRy));
             int magG = static_cast<int>(std::sqrt(somaGx * somaGx + somaGy * somaGy));
             int magB = static_cast<int>(std::sqrt(somaBx * somaBx + somaBy * somaBy));
@@ -702,12 +671,9 @@ void MainWindow::on_btnPrewitt_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Realce e Análise
-// ─────────────────────────────────────────────────────────────
+// Realce e análise.
 
-// Filtro HighBoost: realça detalhes amplificando a diferença entre
-// o original e uma versão borrada. A = 1 equivale ao Unsharpen Mask.
+// Aplica HighBoost.
 void MainWindow::on_btnHighBoost_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -726,7 +692,7 @@ void MainWindow::on_btnHighBoost_clicked()
         for (int x = 1; x < largura - 1; x++) {
             int somaR = 0, somaG = 0, somaB = 0;
 
-            // 1. Calcula o Passa-Baixas (média 3x3 = versão borrada)
+            // Passa-baixas 3x3.
             for (int ky = -1; ky <= 1; ky++) {
                 for (int kx = -1; kx <= 1; kx++) {
                     QColor cor = imgOriginal.pixelColor(x + kx, y + ky);
@@ -742,12 +708,12 @@ void MainWindow::on_btnHighBoost_clicked()
 
             QColor corOriginal = imgOriginal.pixelColor(x, y);
 
-            // 2. Máscara: Detalhes = Original - Borrado
+            // Calcula máscara de detalhes.
             int mascaraR = corOriginal.red()   - mediaR;
             int mascaraG = corOriginal.green() - mediaG;
             int mascaraB = corOriginal.blue()  - mediaB;
 
-            // 3. HighBoost: Resultado = Original + (A × Máscara)
+            // Combina original e máscara.
             int novoR = qBound(0, (int)(corOriginal.red()   + A * mascaraR), 255);
             int novoG = qBound(0, (int)(corOriginal.green() + A * mascaraG), 255);
             int novoB = qBound(0, (int)(corOriginal.blue()  + A * mascaraB), 255);
@@ -759,11 +725,7 @@ void MainWindow::on_btnHighBoost_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// Equalização de histograma por canal (R, G, B independentes).
-// Melhoria em relação ao código original, que convertia a imagem para
-// escala de cinza antes de equalizar — perdendo toda a informação de cor.
-// Equalizar cada canal de forma independente mantém as cores e melhora
-// o contraste em imagens coloridas.
+// Equaliza o histograma por canal.
 void MainWindow::on_btnEqualizar_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -777,7 +739,7 @@ void MainWindow::on_btnEqualizar_clicked()
     int altura  = imgOriginal.height();
     int totalPixels = largura * altura;
 
-    // 1. Calcula o histograma de cada canal separadamente
+    // Calcula histogramas por canal.
     int histR[256] = {0}, histG[256] = {0}, histB[256] = {0};
 
     for (int y = 0; y < altura; y++) {
@@ -789,7 +751,7 @@ void MainWindow::on_btnEqualizar_clicked()
         }
     }
 
-    // 2. Calcula o mapa CDF (histograma acumulado normalizado) para cada canal
+    // Calcula mapa CDF para cada canal.
     int mapaR[256] = {0}, mapaG[256] = {0}, mapaB[256] = {0};
     int acR = 0, acG = 0, acB = 0;
 
@@ -799,7 +761,7 @@ void MainWindow::on_btnEqualizar_clicked()
         acB += histB[i];  mapaB[i] = (acB * 255) / totalPixels;
     }
 
-    // 3. Aplica o mapeamento a cada pixel
+    // Aplica equalização por pixel.
     for (int y = 0; y < altura; y++) {
         for (int x = 0; x < largura; x++) {
             QColor cor = imgOriginal.pixelColor(x, y);
@@ -812,11 +774,9 @@ void MainWindow::on_btnEqualizar_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Geometria
-// ─────────────────────────────────────────────────────────────
+// Geometria.
 
-// Espelha a imagem horizontalmente (eixo vertical).
+// Espelha a imagem horizontalmente.
 void MainWindow::on_btnEspelhar_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -840,8 +800,6 @@ void MainWindow::on_btnEspelhar_clicked()
 }
 
 // Rotaciona a imagem 90° no sentido horário.
-// Opera sobre a imagem processada se existir (permitindo rotações acumulativas),
-// ou sobre a original caso contrário.
 void MainWindow::on_btnRotacionar90_clicked()
 {
     QImage imgAtual = m_imagemProcessada.isNull() ? m_imagemOriginal : m_imagemProcessada;
@@ -854,7 +812,7 @@ void MainWindow::on_btnRotacionar90_clicked()
     int largura = imgAtual.width();
     int altura  = imgAtual.height();
 
-    // A imagem rotacionada tem largura e altura invertidas
+    // Cria imagem rotacionada com dimensões trocadas.
     QImage imgProcessada(altura, largura, imgAtual.format());
 
     for (int y = 0; y < altura; y++) {
@@ -868,12 +826,9 @@ void MainWindow::on_btnRotacionar90_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Máscara Lógica (AND)
-// ─────────────────────────────────────────────────────────────
+// Máscara lógica.
 
-// Aplica uma máscara binária: pixels brancos da máscara mantêm a cor
-// original; pixels escuros tornam-se preto.
+// Aplica máscara binária à imagem.
 void MainWindow::on_btnAplicarMascara_clicked()
 {
     QImage imgBase = m_imagemProcessada.isNull() ? m_imagemOriginal : m_imagemProcessada;
@@ -903,7 +858,7 @@ void MainWindow::on_btnAplicarMascara_clicked()
             QColor corBase    = imgBase.pixelColor(x, y);
             QColor corMascara = imgMascara.pixelColor(x, y);
 
-            // Usa grayValue perceptual para decidir a luminosidade da máscara
+            // Usa grayValue para determinar brilho da máscara.
             int luminosidade = grayValue(corMascara);
             imgProcessada.setPixelColor(x, y, (luminosidade < 128) ? Qt::black : corBase);
         }
@@ -912,13 +867,9 @@ void MainWindow::on_btnAplicarMascara_clicked()
     setProcessedImage(imgProcessada);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Arte ASCII
-// ─────────────────────────────────────────────────────────────
+// Arte ASCII.
 
-// Converte a imagem em arte ASCII colorida: cada pixel vira um caractere
-// cuja densidade visual corresponde ao brilho do pixel, desenhado com
-// a cor original do pixel.
+// Converte a imagem em uma versão ASCII colorida.
 void MainWindow::on_btnAscii_clicked()
 {
     if (m_imagemOriginal.isNull()) {
@@ -928,7 +879,7 @@ void MainWindow::on_btnAscii_clicked()
 
     QImage imgOriginal = m_imagemOriginal;
 
-    // 1. Pegamos a fonte primeiro para saber as proporções do caractere
+    // Determina proporção do caractere.
     QFont fonte("Courier", 5);
     fonte.setStyleHint(QFont::Monospace);
     QFontMetrics fm(fonte);
@@ -936,24 +887,23 @@ void MainWindow::on_btnAscii_clicked()
     int charW = fm.horizontalAdvance('M');
     int charH = fm.height();
 
-    // 2. Calcula o tamanho da grade compensando o "esticamento" da fonte
+    // Define tamanho da grade para ASCII.
     int larguraAscii = 150;
 
-    // A mágica acontece aqui: multiplicamos a altura pelo fator (charW / charH)
-    // para compensar o fato de que a letra é mais alta do que larga.
+    // Ajusta altura para a proporção da fonte.
     int alturaAscii = (imgOriginal.height() * larguraAscii * charW) / (imgOriginal.width() * charH);
 
-    // Redimensiona ignorando a proporção original, pois já calculamos a proporção compensada
+    // Redimensiona usando a proporção compensada.
     QImage imgPequena = imgOriginal.scaled(larguraAscii, alturaAscii, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     int larg = imgPequena.width();
     int alt  = imgPequena.height();
 
-    // 3. Mapa de caracteres: do mais denso (preto) ao mais leve (branco)
+    // Mapa de caracteres por densidade.
     const QString chars = "@%#*+=-:. ";
     int numChars = chars.length();
 
-    // 4. Cria a imagem de saída com fundo preto (tamanho final exato da grade * letras)
+    // Cria imagem de saída para ASCII.
     QImage imgAscii(larg * charW, alt * charH, QImage::Format_RGB32);
     imgAscii.fill(Qt::black);
 
@@ -965,11 +915,11 @@ void MainWindow::on_btnAscii_clicked()
             QColor cor = imgPequena.pixelColor(x, y);
             int cinza  = grayValue(cor);
 
-            // Mapeia o brilho para um índice no mapa de caracteres
+            // Mapeia brilho para caractere.
             int   idx = (cinza * (numChars - 1)) / 255;
             QChar c   = chars[idx];
 
-            // Desenha o caractere com a cor original do pixel
+            // Desenha o caractere colorido.
             pintor.setPen(cor);
             pintor.drawText(x * charW, y * charH + fm.ascent(), QString(c));
         }

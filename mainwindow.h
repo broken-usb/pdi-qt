@@ -43,27 +43,21 @@ private slots:
     void on_btnAscii_clicked();
 
 private:
-    // Calcula o valor de cinza perceptual de uma cor usando a fórmula ITU-R BT.601.
-    // Mais preciso que a média simples (r+g+b)/3 pois pondera cada canal
-    // de acordo com a sensibilidade do olho humano.
+    // Converte a cor em valor de cinza perceptual.
     static int grayValue(const QColor &cor);
 
-    // Desenha o histograma de luminância de uma imagem no lblHistograma.
-    // Elimina a duplicação entre on_btnHistograma e on_btnHistogramaProcessada.
+    // Desenha o histograma de luminância.
     void drawHistogram(const QImage &img);
 
-    // Salva a imagem em m_imagemProcessada e exibe no label.
-    // Centraliza toda atualização do painel direito.
+    // Atualiza a imagem processada e o label correspondente.
     void setProcessedImage(const QImage &img);
 
-    // Retorna o tamanho N do kernel selecionado no combo (ex: "3x3" → 3).
+    // Retorna o tamanho do kernel selecionado.
     int getKernelSize() const;
 
     Ui::MainWindow *ui;
 
-    // Imagens armazenadas como member variables em vez de ficarem presas
-    // dentro do QLabel (pixmap). Isso torna o acesso mais direto,
-    // evita reconversões desnecessárias e facilita futuras extensões.
+    // Imagens originais e processadas.
     QImage m_imagemOriginal;
     QImage m_imagemProcessada;
 };

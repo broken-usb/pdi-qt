@@ -323,7 +323,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Detecta e destaca os contornos da imagem usando o Operador de Sobel (Cálculo de gradientes X e Y).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
-      <string>Sobel (Bordas)</string>
+      <string>Sobel</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btnLaplaciano">

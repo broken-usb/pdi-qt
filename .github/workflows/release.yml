@@ -88,8 +88,8 @@ jobs:
         echo "Icon=PDI-qt" >> AppDir/usr/share/applications/PDI-qt.desktop
         echo "Type=Application" >> AppDir/usr/share/applications/PDI-qt.desktop
         echo "Categories=Graphics;" >> AppDir/usr/share/applications/PDI-qt.desktop
-        
-        touch AppDir/usr/share/icons/hicolor/256x256/apps/PDI-qt.png
+        echo "Comment=Ferramenta avançada de Processamento Digital de Imagens em Qt" >> AppDir/usr/share/applications/PDI-qt.desktop
+        cp AppDir/usr/share/icons/hicolor/256x256/apps/PDI-qt.png
         
         wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
         chmod a+x linuxdeployqt-continuous-x86_64.AppImage
