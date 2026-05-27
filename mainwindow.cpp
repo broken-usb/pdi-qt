@@ -876,57 +876,125 @@ void MainWindow::on_btnAplicarMascara_clicked()
 void MainWindow::on_btnAscii_clicked()
 {
     if (m_imagemOriginal.isNull()) {
-        QMessageBox::warning(this, "Aviso", "Por favor, carregue uma imagem primeiro!");
+        QMessageBox::warning(this, "Aviso",
+                             "Por favor, carregue uma imagem primeiro!");
         return;
     }
 
     QImage imgOriginal = m_imagemOriginal;
 
-    // Determina proporção do caractere.
-    QFont fonte("Courier", 5);
+    // Fonte
+    QFont fonte("Courier", 4);
     fonte.setStyleHint(QFont::Monospace);
+
     QFontMetrics fm(fonte);
 
     int charW = fm.horizontalAdvance('M');
     int charH = fm.height();
 
-    if (charW <= 0 || charH <= 0) return;
+    if (charW <= 0 || charH <= 0)
+        return;
 
-    // Define tamanho da grade para ASCII.
-    int larguraAscii = 150;
+    // Menor resolução ASCII = menos ruído
+    int larguraAscii = 200;
 
-    // Ajusta altura para a proporção da fonte.
-    int alturaAscii = qMax(1, (imgOriginal.height() * larguraAscii * charW) / (imgOriginal.width() * charH));
+    int alturaAscii = qMax(
+        1,
+        (imgOriginal.height() * larguraAscii * charW) /
+            (imgOriginal.width() * charH)
+        );
 
-    // Redimensiona usando a proporção compensada.
-    QImage imgPequena = imgOriginal.scaled(larguraAscii, alturaAscii, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    // Redimensiona
+    QImage imgPequena = imgOriginal.scaled(
+        larguraAscii,
+        alturaAscii,
+        Qt::IgnoreAspectRatio,
+        Qt::SmoothTransformation
+        );
 
     int larg = imgPequena.width();
     int alt  = imgPequena.height();
 
-    // Mapa de caracteres por densidade.
-    const QString chars = "@%#*+=-:. ";
+    // ASCII mais limpo
+    const QString chars = "@#*";
     int numChars = chars.length();
 
-    // Cria imagem de saída para ASCII.
-    QImage imgAscii(larg * charW, alt * charH, QImage::Format_RGB32);
+    // Imagem final
+    QImage imgAscii(
+        larg * charW,
+        alt * charH,
+        QImage::Format_RGB32
+        );
+
     imgAscii.fill(Qt::black);
 
     QPainter pintor(&imgAscii);
     pintor.setFont(fonte);
 
-    for (int y = 0; y < alt; y++) {
-        for (int x = 0; x < larg; x++) {
+    // Threshold mais forte
+    int threshold = 100;
+
+    // Sobel
+    int Gx[3][3] = {
+        {-1, 0, 1},
+        {-2, 0, 2},
+        {-1, 0, 1}
+    };
+
+    int Gy[3][3] = {
+        {-1, -2, -1},
+        { 0,  0,  0},
+        { 1,  2,  1}
+    };
+
+    // Pula pixels para reduzir densidade
+    int passo = 1;
+
+    for (int y = 1; y < alt - 1; y += passo) {
+        for (int x = 1; x < larg - 1; x += passo) {
+
+            int somaX = 0;
+            int somaY = 0;
+
+            // Suavização simples 3x3
+            for (int ky = -1; ky <= 1; ky++) {
+                for (int kx = -1; kx <= 1; kx++) {
+
+                    QColor cor =
+                        imgPequena.pixelColor(x + kx, y + ky);
+
+                    int cinza = grayValue(cor);
+
+                    somaX += cinza * Gx[ky + 1][kx + 1];
+                    somaY += cinza * Gy[ky + 1][kx + 1];
+                }
+            }
+
+            int magnitude = static_cast<int>(
+                std::sqrt(somaX * somaX + somaY * somaY)
+                );
+
+            // Ignora bordas fracas
+            if (magnitude < threshold)
+                continue;
+
             QColor cor = imgPequena.pixelColor(x, y);
-            int cinza  = grayValue(cor);
 
-            // Mapeia brilho para caractere.
-            int   idx = (cinza * (numChars - 1)) / 255;
-            QChar c   = chars[idx];
+            // Mapeia intensidade
+            int idx =
+                (magnitude * (numChars - 1)) / 255;
 
-            // Desenha o caractere colorido.
+            idx = qBound(0, idx, numChars - 1);
+
+            QChar c = chars[idx];
+
             pintor.setPen(cor);
-            pintor.drawText(x * charW, y * charH + fm.ascent(), QString(c));
+
+            pintor.drawText(
+                x * charW,
+                y * charH + fm.ascent(),
+                QString(c)
+                );
         }
     }
 

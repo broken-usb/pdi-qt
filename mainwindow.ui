@@ -29,13 +29,19 @@
    </size>
   </property>
   <property name="contextMenuPolicy">
-   <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+   <enum>Qt::ContextMenuPolicy::PreventContextMenu</enum>
+  </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
   </property>
   <property name="windowTitle">
    <string>PDI - QT</string>
   </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
+  </property>
   <property name="animated">
-   <bool>false</bool>
+   <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="lblOriginal">
@@ -119,7 +125,7 @@
      <rect>
       <x>10</x>
       <y>300</y>
-      <width>331</width>
+      <width>501</width>
       <height>250</height>
      </rect>
     </property>
@@ -431,7 +437,7 @@
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Converte a imagem numa obra de arte baseada em caracteres de texto (ASCII), do mais denso ao mais leve.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Converte as bordas de um imagem numa obra de arte baseada em caracteres de texto (ASCII), do mais denso ao mais leve.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
       <string>ASCII Art</string>
@@ -444,7 +450,7 @@
       <x>590</x>
       <y>120</y>
       <width>141</width>
-      <height>91</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="title">
@@ -492,9 +498,9 @@
    <widget class="QGroupBox" name="grpBoxAnalise">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>520</x>
       <y>460</y>
-      <width>161</width>
+      <width>211</width>
       <height>91</height>
      </rect>
     </property>
@@ -506,7 +512,7 @@
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>141</width>
+       <width>191</width>
        <height>26</height>
       </rect>
      </property>
@@ -517,7 +523,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera o gráfico mostrando a distribuição da quantidade de pixels por tom de cinza na imagem original.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
-      <string>Histograma (O)</string>
+      <string>Histograma: Original</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btnHistogramaProcessada">
@@ -525,7 +531,7 @@
       <rect>
        <x>10</x>
        <y>60</y>
-       <width>141</width>
+       <width>191</width>
        <height>26</height>
       </rect>
      </property>
@@ -536,7 +542,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera o gráfico da imagem processada para você comparar matematicamente o efeito do filtro aplicado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
-      <string>Histograma (E)</string>
+      <string>Histograma: Editada</string>
      </property>
     </widget>
    </widget>
@@ -672,9 +678,9 @@
     <widget class="QComboBox" name="cbTamanhoKernel">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>50</x>
        <y>30</y>
-       <width>81</width>
+       <width>101</width>
        <height>26</height>
       </rect>
      </property>
@@ -790,7 +796,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
