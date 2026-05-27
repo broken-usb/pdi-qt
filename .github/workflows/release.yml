@@ -1,12 +1,16 @@
-name: Gerar Release Portatil
+name: Gerar Release Portátil
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Tag da Versão (ex: v1.0.0)'
+        description: 'Tag da Versão (ex: v1.0.0 ou v1.0.0-beta)'
         required: true
         default: 'v1.0.0'
+      prerelease:
+        description: 'Marcar como Pre-Release?'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -26,6 +30,7 @@ jobs:
         version: '6.5.3'
         arch: 'win64_msvc2019_64'
         setup-python: 'false'
+        cache: 'true'
 
     - name: Configure CMake
       run: cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -33,15 +38,16 @@ jobs:
     - name: Build
       run: cmake --build build --config Release
 
-    - name: Empacotar Executavel (windeployqt)
+    - name: Empacotar Executável (windeployqt)
       shell: pwsh
       run: |
         mkdir deploy
-        # Alterado para respeitar as maiúsculas do CMakeLists.txt
         copy build\Release\PDI-qt.exe deploy\
-        
-        windeployqt --release --compiler-runtime deploy\PDI-qt.exe
-        
+
+        # --no-translations reduz o tamanho do ZIP removendo arquivos de
+        # tradução do Qt que não são utilizados pelo projeto
+        windeployqt --release --compiler-runtime --no-translations deploy\PDI-qt.exe
+
         Compress-Archive -Path deploy\* -DestinationPath PDI-Qt-Windows.zip
 
     - name: Upload Windows Artifact
@@ -54,7 +60,9 @@ jobs:
   # 2. BUILD LINUX (Gera o .AppImage)
   # ==========================================
   build-linux:
-    runs-on: ubuntu-22.04 
+    # Fixado em ubuntu-22.04: o linuxdeployqt foi compilado contra a glibc
+    # desta versão. Usar ubuntu-latest (24.04) pode gerar incompatibilidades.
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
 
@@ -63,38 +71,64 @@ jobs:
       with:
         version: '6.5.3'
         setup-python: 'false'
+        cache: 'true'
 
     - name: Install Linux Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0 libgl1-mesa-dev fuse
+        sudo apt-get install -y \
+          libxcb-cursor0 \
+          libxkbcommon-x11-0 \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-keysyms1 \
+          libxcb-render-util0 \
+          libxcb-xinerama0 \
+          libxcb-xinput0 \
+          libxcb-xfixes0 \
+          libgl1-mesa-dev \
+          fuse
 
     - name: Configure & Build
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build --config Release
 
+    - name: Verificar ícone
+      run: |
+        if [ ! -f icone.png ]; then
+          echo "::warning::icone.png não encontrado na raiz do repositório. O AppImage usará um ícone padrão."
+        fi
+
     - name: Criar AppImage (linuxdeployqt)
       run: |
-        mkdir -p AppDir/usr/bin AppDir/usr/share/applications AppDir/usr/share/icons/hicolor/256x256/apps
-        
-        # Corrigido: 'PDI-qt' com maiúsculas exatamente como no CMakeLists.txt
+        mkdir -p AppDir/usr/bin \
+                 AppDir/usr/share/applications \
+                 AppDir/usr/share/icons/hicolor/256x256/apps
+
         cp build/PDI-qt AppDir/usr/bin/
-        
-        # Criação do atalho Linux com o nome do executável exato
-        echo "[Desktop Entry]" > AppDir/usr/share/applications/PDI-qt.desktop
-        echo "Name=PDI-Qt" >> AppDir/usr/share/applications/PDI-qt.desktop
-        echo "Exec=PDI-qt" >> AppDir/usr/share/applications/PDI-qt.desktop
-        echo "Icon=PDI-qt" >> AppDir/usr/share/applications/PDI-qt.desktop
-        echo "Type=Application" >> AppDir/usr/share/applications/PDI-qt.desktop
-        echo "Categories=Graphics;" >> AppDir/usr/share/applications/PDI-qt.desktop
-        echo "Comment=Ferramenta avançada de Processamento Digital de Imagens em Qt" >> AppDir/usr/share/applications/PDI-qt.desktop
-        cp AppDir/usr/share/icons/hicolor/256x256/apps/PDI-qt.png
-        
+
+        # Criação do atalho Linux via heredoc (mais legível e seguro que
+        # múltiplos echo encadeados)
+        cat > AppDir/usr/share/applications/PDI-qt.desktop << 'EOF'
+        [Desktop Entry]
+        Name=PDI-Qt
+        Exec=PDI-qt
+        Icon=PDI-qt
+        Type=Application
+        Categories=Graphics;
+        Comment=Ferramenta avançada de Processamento Digital de Imagens em Qt
+        EOF
+
+        # Copia o ícone customizado (se existir) para a pasta do AppImage
+        if [ -f icone.png ]; then
+          cp icone.png AppDir/usr/share/icons/hicolor/256x256/apps/PDI-qt.png
+        fi
+
         wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
         chmod a+x linuxdeployqt-continuous-x86_64.AppImage
         ./linuxdeployqt-continuous-x86_64.AppImage AppDir/usr/share/applications/PDI-qt.desktop -appimage
-        
+
         mv PDI-Qt*.AppImage PDI-Qt-Linux.AppImage
 
     - name: Upload Linux Artifact
@@ -108,7 +142,7 @@ jobs:
   # ==========================================
   create-release:
     needs: [build-windows, build-linux]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Download Artifacts
       uses: actions/download-artifact@v4
@@ -116,12 +150,14 @@ jobs:
         path: ./artifacts
 
     - name: Release no GitHub
-      uses: softprops/action-gh-release@v1
+      # SHA fixado para segurança em workflows com permissão de escrita.
+      # Equivale à tag v2 do softprops/action-gh-release.
+      uses: softprops/action-gh-release@c062e08bd532815e2082a7e09ce9571a6e1b2e13
       with:
         tag_name: ${{ github.event.inputs.version }}
-        name: "Release ${{ github.event.inputs.version }}"
+        name: "${{ github.event.inputs.prerelease == 'true' && 'Pre-Release' || 'Release' }} ${{ github.event.inputs.version }}"
         draft: false
-        prerelease: false
+        prerelease: ${{ github.event.inputs.prerelease }}
         generate_release_notes: true
         files: |
           ./artifacts/windows-build/PDI-Qt-Windows.zip
