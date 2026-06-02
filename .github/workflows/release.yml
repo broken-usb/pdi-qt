@@ -150,9 +150,7 @@ jobs:
         path: ./artifacts
 
     - name: Release no GitHub
-      # SHA fixado para segurança em workflows com permissão de escrita.
-      # Equivale à tag v2 do softprops/action-gh-release.
-      uses: softprops/action-gh-release@c062e08bd532815e2082a7e09ce9571a6e1b2e13
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ github.event.inputs.version }}
         name: "${{ github.event.inputs.prerelease == 'true' && 'Pre-Release' || 'Release' }} ${{ github.event.inputs.version }}"
