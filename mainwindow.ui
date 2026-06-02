@@ -678,9 +678,9 @@
     <widget class="QComboBox" name="cbTamanhoKernel">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>60</x>
        <y>30</y>
-       <width>101</width>
+       <width>91</width>
        <height>26</height>
       </rect>
      </property>
@@ -796,7 +796,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
